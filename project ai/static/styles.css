@@ -1,0 +1,245 @@
+/* General Body and Layout */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #333;
+    color: white;
+    padding: 10px 0;
+}
+
+header .container {
+    width: 80%;
+    margin: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header h1 {
+    margin: 0;
+}
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+nav ul li {
+    margin: 0 15px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+}
+
+.open-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.open-btn:hover {
+    background-color: #0056b3;
+}
+
+/* Main Content Styling */
+main {
+    padding: 20px;
+}
+
+.content {
+    display: flex;
+    width: 100%;
+    height: calc(100vh - 140px); /* Adjust to avoid footer overlap */
+    transition: margin-right 0.3s; /* Smooth sidebar transition */
+}
+
+/* Left Container (e.g., Image Section) */
+.container1 {
+    width: 50%;
+    background-color: #f4f4f4;
+    padding: 20px;
+    overflow-y: auto; /* Enable scrolling if content overflows */
+    transition: width 0.3s; /* Smooth transition for width adjustment */
+}
+
+.container1 img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensures image covers the container */
+}
+
+/* Chat Container */
+.chat-container {
+    width: 50%;
+    background-color: #fff;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    transition: margin-right 0.3s;
+}
+
+.chat-box {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding-bottom: 60px; /* Prevents chat input overlap */
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    max-height: 400px; /* Set max height for chat box */
+}
+
+.chat-input-container {
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #fff;
+    padding: 10px;
+    border-top: 1px solid black; /* Optional: Border for visual separation */
+}
+
+#chat-input {
+    width: calc(100% - 120px); /* Adjust to fit within container */
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+#chat-send {
+    padding: 10px 20px;
+    font-size: 16px;
+    margin-left: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#chat-send:hover {
+    background-color: #0056b3;
+}
+
+/* Chat Messages */
+.chat-message {
+    margin: 10px 0;
+}
+
+.chat-message.user {
+    text-align: right;
+    background-color: #d1e7dd;
+    padding: 10px;
+    border-radius: 10px;
+    display: inline-block;
+    max-width: 70%;
+    font-weight: 600;
+    color: #333;
+}
+
+.chat-message.bot {
+    text-align: left;
+    background-color: #f0f0f0;
+    padding: 10px;
+    border-radius: 10px;
+    display: inline-block;
+    max-width: 70%;
+    font-style: italic;
+    border-left: 4px solid #4CAF50; /* Green left border for bot messages */
+}
+
+.bot-text {
+    color: #333;
+    line-height: 1.6;
+    white-space: pre-wrap; /* Preserve line breaks */
+}
+
+.bot-text a {
+    color: #007BFF;
+    text-decoration: underline;
+}
+
+/* Sidebar Styling */
+.chat-sidebar {
+    position: fixed;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: #fff;
+    border-left: 1px solid #ddd;
+    width: 0;
+    transition: width 0.3s; /* Smooth sidebar open/close */
+    overflow-y: auto;
+    z-index: 1000; /* Ensure above other content */
+}
+
+.chat-list {
+    padding: 20px;
+}
+
+.close-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    transition: background-color 0.3s;
+}
+
+.close-btn:hover {
+    background-color: #0056b3;
+}
+
+/* Footer */
+footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 5px 0;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+}
+
+footer .container {
+    width: 80%;
+    margin: auto;
+}
+
+/* Mobile Responsiveness */
+@media screen and (max-width: 768px) {
+    .content {
+        flex-direction: column;
+    }
+
+    .container1, .chat-container {
+        width: 100%;
+    }
+
+    .chat-box, .chat-sidebar {
+        width: 100%;
+    }
+}

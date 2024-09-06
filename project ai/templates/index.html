@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arkace Search Page</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <script type="importmap">
+        {
+            "imports": {
+                "@google/generative-ai": "https://esm.run/@google/generative-ai"
+            }
+        }
+    </script>
+</head>
+<body>
+    <header id="head">
+        <div class="container">
+            <h1>Arkace Search</h1>
+            <nav>
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Features</a></li>
+                    <li><a href="#">Pricing</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+                <button class="open-btn" onclick="toggleSidebar()">Open Chat</button>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="content">
+            <div class="container1">
+                <img src="/static/images/0017.png" alt="">
+            </div>
+            <div class="chat-container">
+                <div class="chat-box" id="chat-box"></div>
+                <div class="chat-input-container">
+                    <input type="text" id="chat-input" class="chat-input" placeholder="Type a message...">
+                    <button class="chat-send" id="chat-send">Send</button>
+                </div>
+                <div class="chat-sidebar" id="chat-sidebar">
+                    <button class="close-btn" onclick="toggleSidebar()">Close</button>
+                    <div class="chat-list">
+                        <!-- List of chats will appear here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 ChatGPT. All rights reserved.</p>
+        </div>
+    </footer>
+    <script src="/static/script.js"></script>
+    <script type="module">
+        import { GoogleGenerativeAI } from "@google/generative-ai";
+        const API_KEY = "AIzaSyDcw5qJwF3KkDNZI2cG_9vVvCDjLLMXGik";
+        const genAI = new GoogleGenerativeAI(API_KEY);
+        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+        const chatBox = document.getElementById('chat-box');
+        const chatInput = document.getElementById('chat-input');
+        const chatSend = document.getElementById('chat-send');
+        let chatHistory = [];
+        function appendMessage(sender, message) {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('chat-message', sender);
+
+            const formattedMessage = message.replace(/\n/g, '<br>');
+
+            if (sender === 'bot') {
+                messageElement.innerHTML = `
+                    <div class="bot-text">${formattedMessage}</div>
+                `;
+            } else {
+                messageElement.innerHTML = formattedMessage;
+            }
+
+            chatBox.appendChild(messageElement);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+        async function getBotResponse(userMessage) {
+            chatHistory.push({ sender: 'user', text: userMessage });
+            const conversationHistory = chatHistory.map(entry => `${entry.sender}: ${entry.text}`).join('\n');
+
+            try {
+                const result = await model.generateContent(conversationHistory);
+                const response = await result.response;
+                const text = await response.text();
+                chatHistory.push({ sender: 'bot', text });
+                appendMessage('bot', text);
+            } catch (error) {
+                console.error('Error:', error);
+                appendMessage('bot', 'Sorry, something went wrong.');
+            }
+        }
+        async function sendInitialMessage() {
+            const initialMessage = "Hello! Please start the conversation directly by asking interview questions and also rate the answer typed by the user and then ask the next question also ask question one by one. Also, first of all ask for the role the user wants to give interview for.";
+            try {
+                const result = await model.generateContent(initialMessage);
+                const response = await result.response;
+                const text = await response.text();
+                chatHistory.push({ sender: 'bot', text });
+                appendMessage('bot', text);
+            } catch (error) {
+                console.error('Error:', error);
+                appendMessage('bot', 'Sorry, something went wrong.');
+            }
+        }
+        chatSend.addEventListener('click', () => {
+            const userMessage = chatInput.value.trim();
+            const additionalText = ". Rate my answer, tell me how can I improve the answer and ask the next question.";
+            if (userMessage) {
+                const messageToSend = userMessage + ' ' + additionalText;
+                appendMessage('user', userMessage);
+                chatInput.value = '';
+                getBotResponse(messageToSend);
+            }
+        });
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                chatSend.click();
+            }
+        });
+        document.addEventListener('DOMContentLoaded', () => {
+            sendInitialMessage();
+        });
+    </script>
+</body>
+</html>
